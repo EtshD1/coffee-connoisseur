@@ -4,14 +4,16 @@ const Banner = () => {
 	};
 
 	return (
-		<div className="pl-32 pt-32 flex flex-col gap-8">
-			<h1 className="flex flex-col md:flex-row font-bold gap-6 text-7xl">
-				<span className="text-[#b76935]">Coffee</span>
-				<span>Connoiseur</span>
+		<div className="px-8 pt-10 flex flex-col gap-4 md:pt-32 md:px-32 md:grid md:grid-cols-4">
+			<h1 className="flex flex-col font-bold md:gap-6 text-4xl md:text-7xl md:col-span-3">
+				<span className="text-[#7c4f3f]">Coffee</span>
+				<span>Connoisseur</span>
 			</h1>
-			<p className="text-3xl">Discover your local Coffee Shops!</p>
-			<div>
-				<button className="px-4 py-1 rounded-md text-white bg-[#b76935] border-2 border-solid border-white border-opacity-50" onClick={buttonClick}>View Stores nearby!</button>
+            <div className="flex flex-col gap-4">
+                <p className="text-xl md:text-lg text-[#452103]">Discover nearby local Coffee Shops with lots of options to explore! Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.</p>
+                <div>
+                    <button className="px-4 py-2 font-bold text-white bg-[#7c4f3f] w-full" onClick={buttonClick}>View Stores nearby!</button>
+                </div>
 			</div>
 		</div>
 	);
