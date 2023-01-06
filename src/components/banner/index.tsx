@@ -24,7 +24,7 @@ const Banner = () => {
                     cillum sint consectetur cupidatat.
                 </p>
                 <Link href="/coffee-stores">
-                    <button className="px-4 py-2 font-bold text-white bg-[#7c4f3f] w-full">
+                    <button className="px-4 py-2 font-bold text-white bg-[#7c4f3f] w-full md:w-auto md:text-lg md:px-8 md:py-4">
                         View Stores nearby!
                     </button>
                 </Link>
