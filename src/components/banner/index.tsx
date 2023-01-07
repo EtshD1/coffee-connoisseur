@@ -12,7 +12,7 @@ const Banner = () => {
             </div>
             <div className="relative w-full h-[75vw] md:h-full md:col-span-4 md:row-span-2 self-center">
                 <Image
-                    src="/hero-image.svg"
+                    src="/static/hero-image.svg"
                     alt="A woman enjoying a coffee break"
                     fill
                 />
