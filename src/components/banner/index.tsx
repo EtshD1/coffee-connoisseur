@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const Banner = () => {
     return (
-        <div className="px-8 pt-8 flex flex-col gap-4 md:pt-32 md:px-32 md:grid md:grid-cols-7 md:grid-rows-2">
+        <div className="px-8 pt-8 flex flex-col gap-4 md:pt-32 md:px-12 lg:px-32 md:grid md:grid-cols-7 md:grid-rows-2">
             <div className="md:col-span-3">
                 <h1 className="flex flex-col font-bold md:gap-6 text-4xl md:text-7xl">
                     <div className="text-[#7c4f3f]">Coffee</div>

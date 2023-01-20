@@ -30,13 +30,13 @@ const Card = ({ imgURL, alt, id, title }: { title: string; id: number; alt: stri
     return (
         <Link href={`/coffee-stores/${id}`}>
             <div className="group bg-orange-100 hover:bg-orange-200 rounded-lg p-4 flex flex-col gap-2 transition-all ease-in border-2 border-solid border-white border-opacity-30 shadow-md">
-                <div ref={titleContainerRef} className="overflow-x-hidden transition-all ease-in relative flex">
-                    <h2 ref={titleRef} className="whitespace-nowrap group-hover:opacity-100 text-xl md:text-4xl opacity-90 transition-all ease-in">{title}</h2>
+                <div ref={titleContainerRef} className="overflow-hidden transition-all ease-in relative flex">
+                    <h2 ref={titleRef} className="whitespace-nowrap group-hover:opacity-100 text-lg md:text-2xl opacity-90 transition-all ease-in">{title}</h2>
                     {dots ? <div className="pl-1 bg-orange-100 group-hover:bg-orange-200 text-xl md:text-4xl transition-all ease-in absolute right-[-1px] ">
                         <span className="group-hover:opacity-100 opacity-90 transition-all ease-in">...</span>
                     </div> : ""}
                 </div>
-                <div className="relative w-full h-60">
+                <div className="relative w-full h-60 lg:h-72">
                     <Image className="object-cover rounded-md" fill src={imgURL} alt={alt} />
                 </div>
             </div>
