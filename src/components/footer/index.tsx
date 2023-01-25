@@ -20,12 +20,12 @@ const Footer = () => {
 					className="flex gap-1"
 				>
 					Powered by{" "}
-					<div className="px-3 py-1 bg-white rounded-md border-2 border-solid border-slate-500">
+					<div className="relative w-20 h-6">
 						<Image
 							src="/vercel.svg"
 							alt="Vercel Logo"
-							width={72}
-							height={16}
+							fill
+							className="object-contain"
 						/>
 					</div>
 				</a>
