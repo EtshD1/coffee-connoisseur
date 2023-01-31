@@ -2,10 +2,10 @@ import Image from "next/image";
 
 const Footer = () => {
 	return (
-		<footer className="py-8 border-t-2 border-solid border-[#45210344] flex items-center justify-center gap-4">
+		<footer className="h-20 border-t-2 border-solid border-[#45210344] flex items-center justify-center gap-4">
 			<div>
 				<a
-					href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+					href="https://www.github.com/EtshD1"
 					target="_blank"
 					rel="noopener noreferrer"
 				>

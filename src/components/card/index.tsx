@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-const Card = ({ imgURL, alt, id, title }: { title: string; id: number; alt: string; imgURL: string }) => {
+const Card = ({ imgURL, alt, id, title }: { title: string; id: string; alt: string; imgURL: string }) => {
     const [dots, setDots] = useState(false);
     const titleRef = useRef<HTMLHeadingElement>(null);
     const titleContainerRef = useRef<HTMLDivElement>(null);
