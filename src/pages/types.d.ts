@@ -37,3 +37,37 @@ interface FoursquarePlaceSearch {
 	results: FoursquarePlace[],
 	context: any
 }
+
+interface Image {
+	url: string;
+	owner: {
+		name: string;
+		photo: string;
+		profile: string;
+	}
+}
+
+interface CoffeeStores {
+	places: FoursquarePlace[],
+	images: Image[]
+}
+
+interface ApiFailResponse {
+	error: true;
+	info: string;
+}
+
+interface ApiSuccessResponse {
+	error: false;
+	info: string;
+	Response: CoffeeStores
+}
+
+type CoffeeStoresProps = {
+	error: true;
+	info: string;
+} | {
+	error: false;
+	info: string;
+	coffeeStores: CoffeeStores
+}

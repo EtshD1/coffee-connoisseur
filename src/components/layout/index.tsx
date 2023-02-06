@@ -1,6 +1,6 @@
 import Card from "../card";
 
-const HomeLayout = ({ heading, items }:{ heading: string; items: { id: string; name: string; imgHref: string }[] }) => {
+const CoffeeStoresList = ({ heading, items }:{ heading: string; items: { id: string; name: string; imgHref: string }[] }) => {
     return (
         <div className="px-8 pb-8 pt-8 md:pt-12 md:px-12 lg:px-32 flex flex-col gap-4">
             <h2 className="text-4xl md:text-6xl font-bold">{heading}</h2>
@@ -11,4 +11,4 @@ const HomeLayout = ({ heading, items }:{ heading: string; items: { id: string; n
     );
 };
 
-export default HomeLayout;
+export default CoffeeStoresList;

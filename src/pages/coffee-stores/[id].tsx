@@ -1,47 +1,57 @@
 import Link from "next/link";
 import { GetStaticPaths, GetStaticProps } from "next";
 import Image from "next/image";
-import { CairoPlaces } from "../../lib/foursquare_api";
+import { GetCoffeeStores } from "../../lib/API";
 
-interface ICoffeeStore {
-	id: number;
-	name: string;
-	imgUrl: string;
-	websiteUrl: string;
-	address: string;
-	neighbourhood: string;
+type PageProps = {
+	error: true;
+	info: string;
+} | {
+	error: false;
+	info: string;
+	coffeeStore: FoursquarePlace & Image
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-	const coffeeStoreData = await CairoPlaces();
+	const coffeeStoreData = await GetCoffeeStores();
+
+	if (coffeeStoreData.error)
+		return {
+			paths: [],
+			fallback: false,
+		};
+
 	return {
-		paths: coffeeStoreData.results.map((_) => ({ params: { id: _.fsq_id } })),
+		paths: coffeeStoreData.Response.places.map((_) => ({ params: { id: _.fsq_id } })),
 		fallback: false,
 	};
 };
 
-export const getStaticProps: GetStaticProps<{
-	coffeeStore: FoursquarePlace | undefined;
-}> = async ({ params }) => {
-	const { results } = await CairoPlaces();
-	if (params) {
-		const coffeeStore = results.find(
+export const getStaticProps: GetStaticProps<PageProps> = async ({ params }) => {
+	const results = await GetCoffeeStores();
+	if (params && !results.error) {
+		const index = results.Response.places.findIndex(
 			(_) => _.fsq_id === params.id
 		);
-		if (coffeeStore) {
-			return { props: { coffeeStore } };
+		if (index >= 0) {
+			return {
+				props: {
+					error: false,
+					info: results.info,
+					coffeeStore: {
+						...results.Response.places[index],
+						...results.Response.images[index % results.Response.images.length]
+					}
+				}
+			};
 		}
 	}
-	return { props: { coffeeStore: undefined } };
+	return { props: { error: true, info: results.error ? results.info : "Unable to get Params" } };
 };
 
-const CoffeeStore = ({
-	coffeeStore,
-}: {
-	coffeeStore: FoursquarePlace | undefined;
-}) => {
-	if (coffeeStore) {
-		const { name, location } = coffeeStore;
+const CoffeeStore = (props: PageProps) => {
+	if (!props.error) {
+		const { name, location, url } = props.coffeeStore;
 
 		return (
 			<div className="px-8 pb-8 pt-8 md:pt-12 md:px-12 lg:px-32 grid gap-4 grid-rows-1 md:grid-cols-2 grid-cols-1">
@@ -60,7 +70,7 @@ const CoffeeStore = ({
 					<div className="relative h-80">
 						<Image
 							className="object-cover rounded-md"
-							src="https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80"
+							src={url}
 							alt={`${name} Photo`}
 							fill
 						/>
