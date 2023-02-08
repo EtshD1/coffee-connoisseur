@@ -6,7 +6,7 @@ const handler = async (
 	req: NextApiRequest,
 	res: NextApiResponse<CoffeeStoresProps>
 ) => {
-	const data = await GetCoffeeStores(30, `${req.query.latitude},${req.query.longitude}`);;
+	const data = await GetCoffeeStores(27, `${req.query.latitude},${req.query.longitude}`);;
 
 	if (data.error)
 		return res.status(200).json({
