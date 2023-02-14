@@ -70,7 +70,7 @@ const Home = (props: CoffeeStoresProps) => {
 			{props.error ?
 				<></>
 				: <CoffeeStoresList
-					heading="Tronto Stores"
+					heading="Cairo Stores"
 					items={props.coffeeStores.places.map((_, i) => ({
 						id: _.fsq_id,
 						name: _.name,
