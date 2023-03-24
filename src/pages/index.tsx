@@ -1,6 +1,6 @@
 import { GetStaticProps } from "next";
 import Head from "next/head";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import Banner from "../components/banner";
 import CoffeeStoresList from "../components/layout";
 import { StoreContext, UpdateCoffeeStores, UpdateLatLong } from "../context/store";
@@ -35,7 +35,7 @@ const Home = (props: CoffeeStoresProps) => {
 	const { dispatch, state } = useContext(StoreContext);
 
 	useEffect(() => {
-		if (state.coords && status === "Done") {
+		state.coords &&
 			fetch(`/api/coffee-stores?latitude=${state.coords.latitude}&longitude=${state.coords.longitude}`)
 				.then(res => res.json())
 				.then((data: CoffeeStoresProps) => {
@@ -43,14 +43,12 @@ const Home = (props: CoffeeStoresProps) => {
 						dispatch(UpdateCoffeeStores(data.coffeeStores))
 				})
 				.catch(err => console.error(err));
-		}
 	}, [state, status, dispatch]);
 
-	const handleCoords = () => {
+	const handleCoords = () =>
 		findLocation()
 			.then(_ => dispatch(UpdateLatLong(_)))
 			.catch(err => console.error(err));
-	};
 
 	return (
 		<div>
@@ -60,7 +58,7 @@ const Home = (props: CoffeeStoresProps) => {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<Banner ErrorMsg={status === "Error" ? info : null} GetUserLocation={handleCoords} />
-			{status === "Done" ? <CoffeeStoresList
+			{state.coffeeStores.images.length > 0 ? <CoffeeStoresList
 				heading="Places near you"
 				items={state.coffeeStores.places.map((_, i) => ({
 					id: _.fsq_id,
