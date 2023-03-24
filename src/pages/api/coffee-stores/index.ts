@@ -1,4 +1,3 @@
-
 import { NextApiResponse, NextApiRequest } from 'next'
 import { GetCoffeeStores } from '../../../lib/API';
 

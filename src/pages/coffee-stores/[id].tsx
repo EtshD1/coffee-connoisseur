@@ -71,7 +71,6 @@ const CoffeeStore = (props: PageProps) => {
 	const { state: { coffeeStores } } = useContext(StoreContext);
 
 	useEffect(() => {
-		console.log(props);
 		if (!isEmtpy(props) && !props.error) return setCoffeeStore(props.coffeeStore)
 
 		const i = coffeeStores.places.findIndex(cs => cs.fsq_id === router.query.id);
