@@ -5,10 +5,10 @@ import Banner from "../components/banner";
 import CoffeeStoresList from "../components/layout";
 import { StoreContext, UpdateCoffeeStores, UpdateLatLong } from "../context/store";
 import useUserLocation from "../hooks/use-user-location";
-import { GetCoffeeStores } from "../lib/API";
+import getCoffeeStores from "../lib/API/getCoffeeStores";
 
 export const getStaticProps: GetStaticProps<CoffeeStoresProps> = async () => {
-	const data = await GetCoffeeStores();
+	const data = await getCoffeeStores();
 
 	if (data.error)
 		return {

@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { GetStaticPaths, GetStaticProps } from "next";
 import Image from "next/image";
-import { GetCoffeeStores } from "../../lib/API";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import { StoreContext } from "../../context/store";
 import { isEmtpy } from "../../utils";
+import getCoffeeStores from "../../lib/API/getCoffeeStores";
 
 type StoreType = {
 	name: string;
@@ -29,7 +29,7 @@ type PageProps = {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-	const coffeeStoreData = await GetCoffeeStores();
+	const coffeeStoreData = await getCoffeeStores();
 
 	if (coffeeStoreData.error)
 		return {
@@ -44,7 +44,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps<PageProps> = async ({ params }) => {
-	const results = await GetCoffeeStores();
+	const results = await getCoffeeStores();
 	if (params && !results.error) {
 		const index = results.Response.places.findIndex(
 			(_) => _.fsq_id === params.id

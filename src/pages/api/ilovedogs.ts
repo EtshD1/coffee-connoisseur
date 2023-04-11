@@ -1,8 +1,8 @@
-import { NextApiResponse, NextApiRequest } from 'next'
+import { NextApiHandler } from 'next'
 
-const handler = async (
-	req: NextApiRequest,
-	res: NextApiResponse<{ message: string }>
+const handler: NextApiHandler<{ message: string }> = async (
+	req,
+	res
 ) => {
 	const { breed } = req.query;
 	return res.status(200).json({
