@@ -15,7 +15,7 @@ const getPhotos = async (limit: number) => {
 		if (!photosQuery.response || photosQuery.status >= 400)
 			return false;
 
-		const photos: Image[] = photosQuery.response.results.map(photo => {
+		const photos: UnsplashImage[] = photosQuery.response.results.map(photo => {
 			return {
 				url: photo.urls.regular,
 				owner: {

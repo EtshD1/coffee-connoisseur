@@ -7,22 +7,19 @@ import { StoreContext, UpdateCoffeeStores, UpdateLatLong } from "../context/stor
 import useUserLocation from "../hooks/use-user-location";
 import getCoffeeStores from "../lib/API/getCoffeeStores";
 
-export const getStaticProps: GetStaticProps<CoffeeStoresProps> = async () => {
+export const getStaticProps: GetStaticProps<IResponse<CoffeeStores>> = async () => {
 	const data = await getCoffeeStores();
 
 	if (data.error)
 		return {
-			props: {
-				error: true,
-				info: data.info,
-			},
+			props: { message: data.info, error: true, data: undefined },
 		}
 
 	return {
 		props: {
 			error: false,
-			info: "ok!",
-			coffeeStores: {
+			message: "ok!",
+			data: {
 				images: data.Response.images,
 				places: data.Response.places
 			}
@@ -30,7 +27,7 @@ export const getStaticProps: GetStaticProps<CoffeeStoresProps> = async () => {
 	};
 };
 
-const Home = (props: CoffeeStoresProps) => {
+const Home = (props: IResponse<CoffeeStores>) => {
 	const [status, info, findLocation] = useUserLocation();
 	const { dispatch, state } = useContext(StoreContext);
 
@@ -38,12 +35,12 @@ const Home = (props: CoffeeStoresProps) => {
 		state.coords &&
 			fetch(`/api/coffee-stores?latitude=${state.coords.latitude}&longitude=${state.coords.longitude}`)
 				.then(res => res.json())
-				.then((data: CoffeeStoresProps) => {
-					if (!data.error)
-						dispatch(UpdateCoffeeStores(data.coffeeStores))
+				.then((value: IResponse<CoffeeStores>) => {
+					if (!value.error && value.data)
+						dispatch(UpdateCoffeeStores(value.data))
 				})
 				.catch(err => console.error(err));
-	}, [state, status, dispatch]);
+	}, [state.coords, status, dispatch]);
 
 	const handleCoords = () =>
 		findLocation()
@@ -65,14 +62,14 @@ const Home = (props: CoffeeStoresProps) => {
 					name: _.name,
 					imgHref: state.coffeeStores.images[i % state.coffeeStores.images.length].url
 				}))} /> : ""}
-			{props.error ?
+			{props.error || !props.data ?
 				<></>
 				: <CoffeeStoresList
 					heading="Cairo Stores"
-					items={props.coffeeStores.places.map((_, i) => ({
+					items={props.data.places.map((_, i) => ({
 						id: _.fsq_id,
 						name: _.name,
-						imgHref: props.coffeeStores.images[i % props.coffeeStores.images.length].url
+						imgHref: props.data!.images[i % props.data!.images.length].url
 					}))}
 				/>
 			}

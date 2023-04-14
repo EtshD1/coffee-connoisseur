@@ -38,7 +38,7 @@ interface FoursquarePlaceSearch {
 	context: any
 }
 
-interface Image {
+interface UnsplashImage {
 	url: string;
 	owner: {
 		name: string;
@@ -49,7 +49,7 @@ interface Image {
 
 interface CoffeeStores {
 	places: FoursquarePlace[],
-	images: Image[]
+	images: UnsplashImage[]
 }
 
 interface ApiFailResponse {
@@ -63,11 +63,8 @@ interface ApiSuccessResponse {
 	Response: CoffeeStores
 }
 
-type CoffeeStoresProps = {
-	error: true;
-	info: string;
-} | {
-	error: false;
-	info: string;
-	coffeeStores: CoffeeStores
+interface IResponse<T> {
+	error: bool;
+	message: string;
+	data?: T
 }

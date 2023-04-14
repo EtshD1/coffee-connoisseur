@@ -1,19 +1,19 @@
 import { NextApiHandler } from 'next'
 import getCoffeeStores from '../../../lib/API/getCoffeeStores';
 
-const handler: NextApiHandler<CoffeeStoresProps> = async (req, res) => {
+const handler: NextApiHandler<IResponse<CoffeeStores>> = async (req, res) => {
 	const data = await getCoffeeStores(27, `${req.query.latitude},${req.query.longitude}`);;
 
 	if (data.error)
-		return res.status(200).json({
-			error: true,
-			info: data.info
+		return res.status(400).json({
+			message: data.info,
+			error: true
 		});
 
 	return res.status(200).json({
+		message: "OK!",
 		error: false,
-		info: "OK!",
-		coffeeStores: data.Response
+		data: data.Response
 	});
 }
 

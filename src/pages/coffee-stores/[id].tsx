@@ -25,7 +25,7 @@ type PageProps = {
 } | {
 	error: false;
 	info: string;
-	coffeeStore: FoursquarePlace & Image
+	coffeeStore: FoursquarePlace & UnsplashImage
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
