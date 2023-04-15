@@ -1,5 +1,6 @@
 import { FieldSet } from "airtable";
 import { NextApiHandler } from "next";
+import { getRecordFields } from "../../../lib/API/Airtable";
 import createAirTableCoffeeStore from "../../../lib/API/Airtable/createAirTableCoffeeStore";
 import getAirtableCoffeeStore from "../../../lib/API/Airtable/getAirTableCoffeeStore";
 import getCoffeeStore from "../../../lib/API/getCoffeeStore";
@@ -42,7 +43,7 @@ const findCoffeeStore: NextApiHandler<IResponse<FieldSet>> = async (req, res) =>
 
 	return res.status(200).json({
 		error: false,
-		data: newCoffeeStore.map(_ => _.fields)[0],
+		data: getRecordFields(newCoffeeStore)[0],
 		message: "Store Generated."
 	});
 }

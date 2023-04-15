@@ -1,4 +1,4 @@
-import coffeeStoreTable from ".";
+import coffeeStoreTable, { getRecordFields } from ".";
 
 const getAirtableCoffeeStore = async (id: string) => {
 	const records = await coffeeStoreTable
@@ -7,7 +7,7 @@ const getAirtableCoffeeStore = async (id: string) => {
 			filterByFormula: `{fsq_id} = '${id}'`
 		}).firstPage();
 
-	return records.map(r => r.fields);
+	return getRecordFields(records);
 }
 
 export default getAirtableCoffeeStore;

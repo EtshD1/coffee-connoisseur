@@ -1,4 +1,4 @@
-import Airtable from 'airtable';
+import Airtable, { FieldSet, Records } from 'airtable';
 
 const token = process.env.AIRTABLE_TOKEN;
 const base = process.env.AIRTABLE_BASE;
@@ -11,5 +11,7 @@ if (!base || base === "")
 const coffeeStoreTable = new Airtable({
 	apiKey: token
 }).base(base)('coffee-stores');
+
+export const getRecordFields = (records : Records<FieldSet>) => records.map(r => r.fields);
 
 export default coffeeStoreTable;

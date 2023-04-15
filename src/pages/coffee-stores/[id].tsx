@@ -70,16 +70,35 @@ const CoffeeStore = (props: PageProps) => {
 	const router = useRouter();
 	const { state: { coffeeStores } } = useContext(StoreContext);
 
+	const handleCoffeeStore = async (fsq_id: string, img_url: string) => {
+		const res = await fetch("/api/coffee-stores/find-store", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({ fsq_id, img_url })
+		});
+
+		const data = await res.json();
+		console.log(data);
+	}
+
 	useEffect(() => {
-		if (!isEmtpy(props) && !props.error) return setCoffeeStore(props.coffeeStore)
+		if (!isEmtpy(props) && !props.error) {
+			handleCoffeeStore(props.coffeeStore.fsq_id, props.coffeeStore.url);
+			return setCoffeeStore(props.coffeeStore);
+		}
 
 		const i = coffeeStores.places.findIndex(cs => cs.fsq_id === router.query.id);
 		if (i >= 0)
+		{
+			handleCoffeeStore(coffeeStores.places[i].fsq_id, coffeeStores.images[i].url);
 			return setCoffeeStore({
 				url: coffeeStores.images[i].url,
 				name: coffeeStores.places[i].name,
 				location: coffeeStores.places[i].location,
 			});
+		}
 	}, [router.query.id, props, coffeeStores]);
 
 	if (router.isFallback)
