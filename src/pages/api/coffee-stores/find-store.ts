@@ -14,38 +14,46 @@ const findCoffeeStore: NextApiHandler<IResponse<FieldSet>> = async (req, res) =>
 	if (!fsq_id)
 		return res.status(400).json({ error: true, message: "Invalid fsq_id" });
 
-	var record = await getAirtableCoffeeStore(fsq_id);
+	try {
+		var record = await getAirtableCoffeeStore(fsq_id);
 
-	if (record.length !== 0) return res.json({
-		error: false,
-		data: record[0],
-		message: "Store found."
-	});
+		if (record.length !== 0) return res.json({
+			error: false,
+			data: record[0],
+			message: "Store found."
+		});
 
-	if (!img_url || img_url == "")
-		return res.status(400).json({ error: true, message: "Please supply an image" });
+		if (!img_url || img_url == "")
+			return res.status(400).json({ error: true, message: "Please supply an image" });
 
-	const place = await getCoffeeStore(fsq_id);
+		const place = await getCoffeeStore(fsq_id);
 
-	if (place.error || place.data === undefined)
-		return res.status(404).json({ error: true, message: "Place is not found" });
+		if (place.error || place.data === undefined)
+			return res.status(404).json({ error: true, message: "Place is not found" });
 
-	const newCoffeeStore = await createAirTableCoffeeStore({
-		fsq_id,
-		img_url,
-		name: place.data.name,
-		address: place.data.location.formatted_address,
-		locality: place.data.location.locality
-	});
+		const newCoffeeStore = await createAirTableCoffeeStore({
+			fsq_id,
+			img_url,
+			name: place.data.name,
+			address: place.data.location.formatted_address,
+			locality: place.data.location.locality
+		});
 
-	if (newCoffeeStore.length === 0)
-		return res.status(500).json({ error: true, message: "Airtable generating failed." })
+		if (newCoffeeStore.length === 0)
+			return res.status(500).json({ error: true, message: "Airtable generating failed." })
 
-	return res.status(200).json({
-		error: false,
-		data: getRecordFields(newCoffeeStore)[0],
-		message: "Store Generated."
-	});
+		return res.status(200).json({
+			error: false,
+			data: getRecordFields(newCoffeeStore)[0],
+			message: "Store Generated."
+		});
+	} catch (error) {
+		console.error(error)
+		return res.status(500).json({
+			error: true,
+			message: "Server Error" + error
+		});
+	}
 }
 
 export default findCoffeeStore;

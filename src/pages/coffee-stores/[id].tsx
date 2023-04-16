@@ -69,19 +69,16 @@ const CoffeeStore = (props: PageProps) => {
 	const [coffeeStore, setCoffeeStore] = useState<StoreType>();
 	const router = useRouter();
 	const { state: { coffeeStores } } = useContext(StoreContext);
+	const [votes, setVotes] = useState(0);
 
-	const handleCoffeeStore = async (fsq_id: string, img_url: string) => {
-		const res = await fetch("/api/coffee-stores/find-store", {
+	const handleCoffeeStore = (fsq_id: string, img_url: string) =>
+		fetch("/api/coffee-stores/find-store", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json"
 			},
 			body: JSON.stringify({ fsq_id, img_url })
 		});
-
-		const data = await res.json();
-		console.log(data);
-	}
 
 	useEffect(() => {
 		if (!isEmtpy(props) && !props.error) {
@@ -90,8 +87,7 @@ const CoffeeStore = (props: PageProps) => {
 		}
 
 		const i = coffeeStores.places.findIndex(cs => cs.fsq_id === router.query.id);
-		if (i >= 0)
-		{
+		if (i >= 0) {
 			handleCoffeeStore(coffeeStores.places[i].fsq_id, coffeeStores.images[i].url);
 			return setCoffeeStore({
 				url: coffeeStores.images[i].url,
@@ -114,6 +110,8 @@ const CoffeeStore = (props: PageProps) => {
 				<h2>Store is not found</h2>
 			</div>
 		);
+
+	const commend = () => setVotes(_ => _ + 1);
 
 	return (
 		<div className="px-8 pb-8 pt-8 md:pt-12 md:px-12 lg:px-32 grid gap-4 grid-rows-1 md:grid-cols-2 grid-cols-1">
@@ -155,10 +153,12 @@ const CoffeeStore = (props: PageProps) => {
 					<div className="relative w-7 h-7">
 						<Image src="/static/icons/star.svg" alt="Address icon" fill />
 					</div>
-					<h3>3</h3>
+					<h3>{votes}</h3>
 				</div>
 				<div className="flex justify-end">
-					<button className="bg-white bg-opacity-20 px-4 rounded-3xl hover:bg-opacity-30 transition-all ease-in hover:scale-105">Commend</button>
+					<button 
+						onClick={commend}
+						className="bg-white bg-opacity-20 px-4 rounded-3xl hover:bg-opacity-30 transition-all ease-in hover:scale-105">Commend</button>
 				</div>
 			</div>
 		</div>
