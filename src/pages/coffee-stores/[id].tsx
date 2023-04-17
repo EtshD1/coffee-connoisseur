@@ -6,15 +6,14 @@ import { useContext, useEffect, useState } from "react";
 import { StoreContext } from "../../context/store";
 import { isEmtpy } from "../../utils";
 import getCoffeeStores from "../../lib/API/getCoffeeStores";
+import useSWR from 'swr';
+import { handleCoffeeStore, swrFetcher } from "../../lib/API/helper";
 
 type StoreType = {
 	name: string;
 	location: {
-		country: string;
-		cross_street: string,
 		formatted_address: string,
 		locality: string,
-		region: string
 	},
 	url: string
 }
@@ -66,38 +65,51 @@ export const getStaticProps: GetStaticProps<PageProps> = async ({ params }) => {
 };
 
 const CoffeeStore = (props: PageProps) => {
+	const [loading, setLoading] = useState(true);
 	const [coffeeStore, setCoffeeStore] = useState<StoreType>();
 	const router = useRouter();
 	const { state: { coffeeStores } } = useContext(StoreContext);
 	const [votes, setVotes] = useState(0);
 
-	const handleCoffeeStore = (fsq_id: string, img_url: string) =>
-		fetch("/api/coffee-stores/find-store", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json"
-			},
-			body: JSON.stringify({ fsq_id, img_url })
-		});
+	const { data } = useSWR(
+		`/api/coffee-stores/get-store-votes?fsq_id=${router.query.id}`,
+		(args) => swrFetcher(args)
+	);
+
+	const handleStates = async (id: string, img_url?: string | undefined) => {
+		try {
+			const value = await handleCoffeeStore(id, img_url);
+			if (value) {
+				setCoffeeStore(value);
+				return setLoading(false);
+			}
+		} catch (err) {
+			console.error(err);
+			return setLoading(false);
+		}
+	}
 
 	useEffect(() => {
 		if (!isEmtpy(props) && !props.error) {
 			handleCoffeeStore(props.coffeeStore.fsq_id, props.coffeeStore.url);
-			return setCoffeeStore(props.coffeeStore);
+			setCoffeeStore(props.coffeeStore);
+			return setLoading(false);
 		}
 
 		const i = coffeeStores.places.findIndex(cs => cs.fsq_id === router.query.id);
-		if (i >= 0) {
-			handleCoffeeStore(coffeeStores.places[i].fsq_id, coffeeStores.images[i].url);
-			return setCoffeeStore({
-				url: coffeeStores.images[i].url,
-				name: coffeeStores.places[i].name,
-				location: coffeeStores.places[i].location,
-			});
-		}
+		if (i >= 0)
+			handleStates(coffeeStores.places[i].fsq_id, coffeeStores.images[i].url)
+
+		else if (router.query.id)
+			handleStates(router.query.id.toString())
 	}, [router.query.id, props, coffeeStores]);
 
-	if (router.isFallback)
+	useEffect(() => {
+		if (data && !data.error)
+			setVotes(data.votes)
+	}, [data]);
+
+	if (router.isFallback || loading)
 		return (
 			<div className="flex justify-center items-center h-screen">
 				<h2>Loading</h2>
@@ -156,7 +168,7 @@ const CoffeeStore = (props: PageProps) => {
 					<h3>{votes}</h3>
 				</div>
 				<div className="flex justify-end">
-					<button 
+					<button
 						onClick={commend}
 						className="bg-white bg-opacity-20 px-4 rounded-3xl hover:bg-opacity-30 transition-all ease-in hover:scale-105">Commend</button>
 				</div>
