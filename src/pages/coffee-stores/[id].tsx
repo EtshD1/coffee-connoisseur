@@ -7,7 +7,7 @@ import { StoreContext } from "../../context/store";
 import { isEmtpy } from "../../utils";
 import getCoffeeStores from "../../lib/API/getCoffeeStores";
 import useSWR from 'swr';
-import { handleCoffeeStore, swrFetcher } from "../../lib/API/helper";
+import { commendStoreRequest, handleCoffeeStoreRequest, swrFetcher } from "../../lib/API/helper";
 
 type StoreType = {
 	name: string;
@@ -71,14 +71,14 @@ const CoffeeStore = (props: PageProps) => {
 	const { state: { coffeeStores } } = useContext(StoreContext);
 	const [votes, setVotes] = useState(0);
 
-	const { data } = useSWR(
-		`/api/coffee-stores/get-store-votes?fsq_id=${router.query.id}`,
+	const { data: votesRequests } = useSWR(
+		router.query.id === undefined ? null : `/api/coffee-stores/get-store-votes?fsq_id=${router.query.id}`,
 		(args) => swrFetcher(args)
 	);
 
 	const handleStates = async (id: string, img_url?: string | undefined) => {
 		try {
-			const value = await handleCoffeeStore(id, img_url);
+			const value = await handleCoffeeStoreRequest(id, img_url);
 			if (value) {
 				setCoffeeStore(value);
 				return setLoading(false);
@@ -91,7 +91,7 @@ const CoffeeStore = (props: PageProps) => {
 
 	useEffect(() => {
 		if (!isEmtpy(props) && !props.error) {
-			handleCoffeeStore(props.coffeeStore.fsq_id, props.coffeeStore.url);
+			handleCoffeeStoreRequest(props.coffeeStore.fsq_id, props.coffeeStore.url);
 			setCoffeeStore(props.coffeeStore);
 			return setLoading(false);
 		}
@@ -105,9 +105,9 @@ const CoffeeStore = (props: PageProps) => {
 	}, [router.query.id, props, coffeeStores]);
 
 	useEffect(() => {
-		if (data && !data.error)
-			setVotes(data.votes)
-	}, [data]);
+		if (votesRequests && !votesRequests.error)
+			setVotes(votesRequests.data.votes)
+	}, [votesRequests]);
 
 	if (router.isFallback || loading)
 		return (
@@ -123,7 +123,8 @@ const CoffeeStore = (props: PageProps) => {
 			</div>
 		);
 
-	const commend = () => setVotes(_ => _ + 1);
+	const commend = () =>
+		router.query.id && commendStoreRequest(router.query.id.toString()).then(value => value && !value.error && setVotes(value.data));
 
 	return (
 		<div className="px-8 pb-8 pt-8 md:pt-12 md:px-12 lg:px-32 grid gap-4 grid-rows-1 md:grid-cols-2 grid-cols-1">

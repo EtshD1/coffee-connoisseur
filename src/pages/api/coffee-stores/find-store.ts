@@ -15,11 +15,11 @@ const findCoffeeStore: NextApiHandler<IResponse<FieldSet>> = async (req, res) =>
 		return res.status(400).json({ error: true, message: "Invalid fsq_id" });
 
 	try {
-		var record = await getAirtableCoffeeStore(fsq_id);
+		const records = await getAirtableCoffeeStore(fsq_id);
 
-		if (record.length !== 0) return res.json({
+		if (records.length !== 0) return res.json({
 			error: false,
-			data: record[0],
+			data: getRecordFields(records)[0],
 			message: "Store found."
 		});
 

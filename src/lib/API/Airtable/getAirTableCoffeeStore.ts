@@ -1,6 +1,6 @@
 import { FieldSet } from "airtable";
 import { QueryParams } from "airtable/lib/query_params";
-import coffeeStoreTable, { getRecordFields } from ".";
+import coffeeStoreTable from ".";
 
 const getAirtableCoffeeStore = async (id: string, fields?: (number | string)[]) => {
 	const params: QueryParams<FieldSet> = {
@@ -12,7 +12,7 @@ const getAirtableCoffeeStore = async (id: string, fields?: (number | string)[]) 
 	const records = await coffeeStoreTable
 		.select(params).firstPage();
 
-	return getRecordFields(records);
+	return records;
 }
 
 export default getAirtableCoffeeStore;
