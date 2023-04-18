@@ -35,12 +35,10 @@ export const handleCoffeeStoreRequest = async (fsq_id: string, img_url?: string)
 
 export const commendStoreRequest = async (fsq_id: string) => {
 	const res = await fetch(`/api/coffee-stores/commend-store?fsq_id=${fsq_id}`, {
-		method: "POST",
+		method: "PATCH",
 	});
 
 	const value = await res.json();
-
-	console.log(value);
 
 	if (value.err || !value.data)
 		return false;

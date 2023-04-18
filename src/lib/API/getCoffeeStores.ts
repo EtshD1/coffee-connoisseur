@@ -15,7 +15,6 @@ const getCoffeeStores = async (limit?: number, latLong?: string): Promise<ApiSuc
 		const places: FoursquarePlaceSearch = await res.json();
 
 		if (res.status >= 400) {
-			console.log(places)
 			return {
 				error: true,
 				info: "An error occurred while fetching stores"

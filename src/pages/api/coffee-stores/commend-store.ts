@@ -1,9 +1,8 @@
 import { NextApiHandler } from "next";
-import commendAirTableCoffeeStore from "../../../lib/API/Airtable/commendAirTableCoffeeStore";
 import getAirtableCoffeeStore from "../../../lib/API/Airtable/getAirTableCoffeeStore";
 
 const handler: NextApiHandler<IResponse<number>> = async (req, res) => {
-	if (req.method !== "POST")
+	if (req.method !== "PATCH")
 		return res.status(405).json({ error: true, message: "Method not allowed" });
 
 	const { fsq_id } = req.query;
@@ -21,11 +20,15 @@ const handler: NextApiHandler<IResponse<number>> = async (req, res) => {
 
 		const record = records[0];
 
-		const newVotes = await commendAirTableCoffeeStore(record.id, record.fields.votes as number);
+		const newValue = await record.updateFields({ votes: record.fields.votes as number + 1 });
 
-		return newVotes
-			? res.status(200).json({ error: false, message: "Store votes updated", data: newVotes })
-			: res.status(404).json({ error: false, message: "Store is not found." });
+		return res
+			.status(200)
+			.json({
+				error: false,
+				message: "Store votes updated",
+				data: newValue.fields.votes as number
+			});
 	} catch (err) {
 		console.error(err);
 		return res.status(500).json({ error: true, message: "Server Error" });
