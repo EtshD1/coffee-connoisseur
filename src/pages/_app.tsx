@@ -6,6 +6,7 @@ import StoreProvider from "../context/store";
 
 const mukta = Mukta({
 	weight: ["400", "700", "600"],
+	subsets: ["latin"]
 });
 
 export default function App({ Component, pageProps }: AppProps) {
