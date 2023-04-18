@@ -8,6 +8,7 @@ import { isEmtpy } from "../../utils";
 import getCoffeeStores from "../../lib/API/getCoffeeStores";
 import useSWR from 'swr';
 import { commendStoreRequest, handleCoffeeStoreRequest, swrFetcher } from "../../lib/API/helper";
+import Head from "next/head";
 
 type StoreType = {
 	name: string;
@@ -127,54 +128,61 @@ const CoffeeStore = (props: PageProps) => {
 		router.query.id && commendStoreRequest(router.query.id.toString()).then(value => value && !value.error && setVotes(value.data));
 
 	return (
-		<div className="px-8 pb-8 pt-8 md:pt-12 md:px-12 lg:px-32 grid gap-4 grid-rows-1 md:grid-cols-2 grid-cols-1">
-			<div className="md:col-span-2">
-				<Link className="text-lg md:text-xl" href="/">
-					<div className="flex gap-2 items-center">
-						<div className="relative h-6 w-4">
-							<Image src={"/static/icons/backArrow.svg"} alt={"home"} fill />
+		<>
+			<Head>
+				<title>Coffee Connoisseur{coffeeStore ? ` - ${coffeeStore.name}` : ""}</title>
+				<meta name="description" content="Coffee Connoisseur" />
+				<link rel="icon" href="/favicon.ico" />
+			</Head>
+			<div className="px-8 pb-8 pt-8 md:pt-12 md:px-12 lg:px-32 grid gap-4 grid-rows-1 md:grid-cols-2 grid-cols-1">
+				<div className="md:col-span-2">
+					<Link className="text-lg md:text-xl" href="/">
+						<div className="flex gap-2 items-center">
+							<div className="relative h-6 w-4">
+								<Image src={"/static/icons/backArrow.svg"} alt={"home"} fill />
+							</div>
+							<div>Home</div>
 						</div>
-						<div>Home</div>
+					</Link>
+					<h1 className="font-bold text-xl md:text-4xl">{coffeeStore.name}</h1>
+				</div>
+				<div className="flex flex-col gap-1">
+					<div className="relative h-80">
+						<Image
+							className="object-cover rounded-md"
+							src={coffeeStore.url}
+							alt={`${coffeeStore.name} Photo`}
+							fill
+						/>
 					</div>
-				</Link>
-				<h1 className="font-bold text-xl md:text-4xl">{coffeeStore.name}</h1>
+				</div>
+				<div className="flex flex-col gap-2 rounded-md text-white text-lg px-4 py-4 bg-[#452103]">
+					<div className="flex gap-2">
+						<div className="relative w-7 h-7">
+							<Image src="/static/icons/location.svg" alt="Address icon" fill />
+						</div>
+						<h3>{coffeeStore.location.locality}</h3>
+					</div>
+					<div className="flex gap-2">
+						<div className="relative w-7 h-7">
+							<Image src="/static/icons/navigation.svg" alt="Address icon" fill />
+						</div>
+						<h3>{coffeeStore.location.formatted_address}</h3>
+					</div>
+					<div className="flex gap-2">
+						<div className="relative w-7 h-7">
+							<Image src="/static/icons/star.svg" alt="Address icon" fill />
+						</div>
+						<h3>{votes}</h3>
+					</div>
+					<div className="flex justify-end">
+						<button
+							onClick={commend}
+							className="bg-white bg-opacity-20 px-4 rounded-3xl hover:bg-opacity-30 transition-all ease-in hover:scale-105">Commend</button>
+					</div>
+				</div>
 			</div>
-			<div className="flex flex-col gap-1">
-				<div className="relative h-80">
-					<Image
-						className="object-cover rounded-md"
-						src={coffeeStore.url}
-						alt={`${coffeeStore.name} Photo`}
-						fill
-					/>
-				</div>
-			</div>
-			<div className="flex flex-col gap-2 rounded-md text-white text-lg px-4 py-4 bg-[#452103]">
-				<div className="flex gap-2">
-					<div className="relative w-7 h-7">
-						<Image src="/static/icons/location.svg" alt="Address icon" fill />
-					</div>
-					<h3>{coffeeStore.location.locality}</h3>
-				</div>
-				<div className="flex gap-2">
-					<div className="relative w-7 h-7">
-						<Image src="/static/icons/navigation.svg" alt="Address icon" fill />
-					</div>
-					<h3>{coffeeStore.location.formatted_address}</h3>
-				</div>
-				<div className="flex gap-2">
-					<div className="relative w-7 h-7">
-						<Image src="/static/icons/star.svg" alt="Address icon" fill />
-					</div>
-					<h3>{votes}</h3>
-				</div>
-				<div className="flex justify-end">
-					<button
-						onClick={commend}
-						className="bg-white bg-opacity-20 px-4 rounded-3xl hover:bg-opacity-30 transition-all ease-in hover:scale-105">Commend</button>
-				</div>
-			</div>
-		</div>
+		</>
 	);
 };
 
