@@ -51,7 +51,7 @@ const Home = (props: IResponse<CoffeeStores>) => {
 		<div>
 			<Head>
 				<title>Coffee Connoisseur</title>
-				<meta name="description" content="Coffee Connoisseur" />
+				<meta name="description" content="Discover nearby coffee Stores in an instant!" />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<Banner ErrorMsg={status === "Error" ? info : null} GetUserLocation={handleCoords} />

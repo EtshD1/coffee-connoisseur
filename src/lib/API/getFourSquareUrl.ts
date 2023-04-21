@@ -1,7 +1,7 @@
 const url = process.env.FOURSQUARE_API;
 
- if (!url || url === "")
- 	throw new Error("Foursquare API URL is not found");
+if (!url || url === "")
+	throw new Error("Foursquare API URL is not found");
 
 const getFourSquareUrl = (limit: number, latLong: string | null) => {
 	const params: string[] = ["categories=13032"];

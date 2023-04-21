@@ -131,7 +131,7 @@ const CoffeeStore = (props: PageProps) => {
 		<>
 			<Head>
 				<title>Coffee Connoisseur{coffeeStore ? ` - ${coffeeStore.name}` : ""}</title>
-				<meta name="description" content="Coffee Connoisseur" />
+				<meta name="description" content={coffeeStore ? `${coffeeStore.name} coffee store information!` : "Discover nearby coffee Stores in an instant!"} />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<div className="px-8 pb-8 pt-8 md:pt-12 md:px-12 lg:px-32 grid gap-4 grid-rows-1 md:grid-cols-2 grid-cols-1">
